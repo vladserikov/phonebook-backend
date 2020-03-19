@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+app.use(express.json())
+
 let persons = [
     {
         "name": "Arto Hellas",
@@ -69,6 +71,28 @@ app.delete('/api/persons/:id', (req, res) => {
 
     persons = persons.filter(p => p.id !== id)
     res.status(204).end()
+})
+
+const generateId = () => Math.floor(Math.random() * 5000) + 1
+
+app.post('/api/persons', (req, res) => {
+    const body = req.body
+    const findName = persons.find(p => p.name === body.name)
+    if(!body.name || !body.number || findName){
+        return res.status(400).json({
+            error: 'name must be unique'
+        })
+    }
+
+    const person = {
+        name: body.name,
+        number: body.number,
+        id: generateId(),
+    }
+
+    persons = persons.concat(person)
+
+    res.json(person)
 })
 
 const PORT = 3001;
