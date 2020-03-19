@@ -7,7 +7,7 @@
     "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rm -rf build && cd ../front-phone/ && npm run build --prod && cp -r build ../back-phone",
-    "deploy": "git push heroku maset",
+    "deploy": "git push heroku master",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibild && npm run deploy",
     "logs:prod": "heroku logs --tail",
     "open": "heroku open"
