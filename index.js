@@ -82,7 +82,7 @@ app.delete('/api/persons/:id', (req, res) => {
 
 const generateId = () => Math.floor(Math.random() * 5000) + 1
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
     const body = req.body
     
     if(!body.name || !body.number){
@@ -96,9 +96,11 @@ app.post('/api/persons', (req, res) => {
         number: body.number,
     })
 
-    person.save().then(person => {
-        res.json(person.toJSON())
-    })
+    person.save()
+        .then(person => {
+            res.json(person.toJSON())
+        })
+        .catch(err => next(err))
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
@@ -117,10 +119,13 @@ app.put('/api/persons/:id', (req, res, next) => {
 })
 
 const errorHandler = (error, reqest, response, next) => {
-    console.error(error.message)
+    console.error(error.message, 'error.message')
 
     if (error.name === 'CastError' && error.kind === 'ObjectId') {
         return response.status(400).send({ error: 'mal formatted id' })
+    } else if (error.name === 'ValidationError'){
+        console.log('Validation')
+        return response.status(400).send({error: error.message})
     }
 
     next(error)
