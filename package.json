@@ -8,9 +8,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:ui": "rm -rf build && cd ../front-phone/ && npm run build --prod && cp -r build ../back-phone",
     "deploy": "git push heroku master",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibild && npm run deploy",
+    "deploy:full": "npm run build:ui && git add . && git commit -m $COMMIT && npm run deploy",
     "logs:prod": "heroku logs --tail",
-    "open": "heroku open"
+    "open": "heroku open",
+    "lint": "eslint ."
   },
   "author": "Vlad Serikov",
   "license": "MIT",
@@ -22,6 +23,7 @@
     "morgan": "^1.9.1"
   },
   "devDependencies": {
+    "eslint": "^6.8.0",
     "nodemon": "^2.0.2"
   },
   "description": "backend phonebook"
